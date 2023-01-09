@@ -1,4 +1,4 @@
-# UGV SDK
+# UGV SDK/
 
 ![GitHub Workflow Status](https://github.com/westonrobot/ugv_sdk/workflows/Cpp/badge.svg)
 ![GitHub Workflow Status](https://github.com/westonrobot/ugv_sdk/workflows/ROS/badge.svg)
