@@ -19,7 +19,7 @@ extern "C" {
 #include <stdint.h>
 #include <string.h>
 
-#include "ugv_sdk/details/interface/agilex_types.h"
+#include "agilex_types.h"
 
 /***************** Control messages *****************/
 

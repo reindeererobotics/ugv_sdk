@@ -7,8 +7,8 @@
  * Copyright (c) 2021 Weston Robot Pte. Ltd.
  */
 
-#include "ugv_sdk/details/protocol_v2/protocol_v2_parser.hpp"
-#include "protocol_v2/agilex_msg_parser_v2.h"
+#include "/home/raz/Github/Agilex-CAN-interface/libs/ugv_sdk/include/ugv_sdk/details/protocol_v2/protocol_v2_parser.hpp"
+#include "agilex_msg_parser_v2.h"
 
 namespace westonrobot {
 bool ProtocolV2Parser::DecodeMessage(const struct can_frame *rx_frame,
