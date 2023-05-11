@@ -1,0 +1,2 @@
+add_executable(demo_dasher_robot dasher_robot_demo.cpp)
+target_link_libraries(demo_dasher_robot ugv_sdk)
