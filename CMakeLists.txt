@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.1)
+cmake_minimum_required(VERSION 3.5.1...3.22)
 project(ugv_sdk VERSION 0.2.0)
 
 find_program(CCACHE_PROGRAM ccache)
@@ -82,6 +82,19 @@ if(BUILD_WITHOUT_ROS)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 endif()
 
+# Fetching robotdataparser
+include(FetchContent)
+set(FETCHCONTENT_UPDATES_DISCONNECTED_ROBOTDATAPARSER ON)
+FetchContent_Declare(
+    robotDataParser
+    GIT_REPOSITORY https://github.com/reindeererobotics/robotDataParser.git
+    GIT_TAG 086edc00de68d23345b1039efe65cb17e1e9bc00
+    GIT_SHALLOW TRUE  # only fetches a subset of the repository's history, starting from the specified commit or branch
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/robotDataParser
+    )
+
+FetchContent_MakeAvailable(robotDataParser)
+
 ## Build libraries
 find_package(Threads REQUIRED)
 
@@ -108,7 +121,7 @@ add_library(${PROJECT_NAME}
     ## legacy protocol v1 support (transparent to user)
     src/protocol_v1/agilex_msg_parser_v1.c
 )
-target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
+target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads robotdataparser)
 target_compile_definitions(${PROJECT_NAME} PUBLIC ASIO_ENABLE_OLD_SERVICES)
 target_include_directories(${PROJECT_NAME} PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
