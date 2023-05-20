@@ -2,6 +2,8 @@
 */Debug
 build
 */build
+*/libs
+libs
 cmake-build-debug
 cmake-build-release/
 *.xlsx

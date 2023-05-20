@@ -7,7 +7,7 @@
 
 This software package provides a C++ interface to communicate with the mobile platforms from Weston Robot and AgileX Robotics, for sending commands to the robot and receiving the latest robot state. The repository is a joint effort by the development teams at Weston Robot (Singapore) and AgileX Robotics (China).
 
-- Copyright (c) 2020-2021 [Weston Robot](https://www.westonrobot.com/) 
+- Copyright (c) 2020-2021 [Weston Robot](https://www.westonrobot.com/)
 - Copyright (c) 2020-2021 [AgileX Robotics](http://www.agilex.ai/?lang=zh-cn)
 
 Please create an issue on Github at https://github.com/westonrobot/ugv_sdk/issues if you encounter any problems when using the packages.
@@ -43,7 +43,7 @@ It should also work in other similar Linux environments but only the above liste
 |      Tracer       |      -      |      Y      |   N   |   Y   |     Active     |
 |    Ranger Mini    |      -      |      Y      |   -   |   Y   |     Active     |
 
-**Important Note** 
+**Important Note**
 
 The main branch of this repository supports all Scout variants and both V1 and V2 protocol. Earlier versions of the SDK can be found in v1.x and v2.x branch for V1 and V2 protocol support respectively.
 
@@ -68,8 +68,14 @@ $ cd ..
 $ catkin_make
 ```
 
-## Setup CAN-To-USB adapter 
- 
+### Build with cmake
+```sh
+cmake -S . -B build -G Ninja # omit '-G Ninja' if using Unix Makefile Generator
+cmake --build ./build/
+```
+
+## Setup CAN-To-USB adapter
+
 1. Enable gs_usb kernel module
     ```
     $ sudo modprobe gs_usb
