@@ -6,3 +6,4 @@ add_subdirectory(bunker_demo)
 add_subdirectory(hunter_demo)
 
 add_subdirectory(utils_demo)
+add_subdirectory(dasher_demo)
