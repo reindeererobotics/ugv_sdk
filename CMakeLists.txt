@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.1...3.22)
+cmake_minimum_required(VERSION 3.5.1)
 project(ugv_sdk VERSION 0.2.0)
 
 find_program(CCACHE_PROGRAM ccache)
@@ -130,7 +130,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 # Build demo
 if(BUILD_WITHOUT_ROS)
-    add_subdirectory(demo)
+    add_subdirectory(sample)
 endif()
 
 # Build tests
