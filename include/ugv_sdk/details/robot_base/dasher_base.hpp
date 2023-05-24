@@ -53,6 +53,10 @@ class DasherBase : public westonrobot::ScoutBase<westonrobot::ProtocolV2Parser> 
     return DasherActuatorState{ScoutBase::GetActuatorState()};
   }
 
+  westonrobot::ScoutCommonSensorState GetCommonSensorState() override{
+    
+    return DasherCommonSensorState{ScoutBase::GetCommonSensorState()};
+  }
 
 };
 

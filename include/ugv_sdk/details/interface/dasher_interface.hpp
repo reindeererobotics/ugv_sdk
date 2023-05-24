@@ -25,6 +25,11 @@ class DasherActuatorState : public westonrobot::ScoutActuatorState {
       : ScoutActuatorState(scout_state) {}
 };
 
+class DasherCommonSensorState : public westonrobot::ScoutCommonSensorState {
+  public:
+   DasherCommonSensorState(const westonrobot::ScoutCommonSensorState& scout_state)
+      : ScoutCommonSensorState(scout_state) {}
+};
 
 class DasherInterface : public westonrobot::ScoutInterface {
   public:
@@ -42,6 +47,7 @@ class DasherInterface : public westonrobot::ScoutInterface {
 
    virtual westonrobot::ScoutCoreState GetRobotState() = 0;
    virtual westonrobot::ScoutActuatorState GetActuatorState() = 0;
+   virtual westonrobot::ScoutCommonSensorState GetCommonSensorState() = 0;
 };
 
 

@@ -37,6 +37,7 @@ class DasherRobot : public westonrobot::ScoutRobot::ScoutRobot{
   // get robot state
   DasherCoreState GetDasherRobotState();
   DasherActuatorState GetDasherActuatorState();
+  DasherCommonSensorState GetDasherCommonSensorState();
 
  protected:
   RobotCommonInterface* robot_;
