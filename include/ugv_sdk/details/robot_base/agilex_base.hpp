@@ -21,6 +21,7 @@
 #include "ugv_sdk/details/async_port/async_can.hpp"
 #include "ugv_sdk/details/interface/robot_common_interface.hpp"
 #include "ugv_sdk/details/interface/parser_interface.hpp"
+#include "reindeere/reindeere_message.h"
 
 namespace westonrobot {
 template <typename ParserType>

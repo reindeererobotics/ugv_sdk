@@ -113,6 +113,7 @@ add_library(${PROJECT_NAME}
     src/mobile_robot/hunter_robot.cpp
     src/mobile_robot/bunker_robot.cpp
     src/mobile_robot/dasher_robot.cpp
+    include/ugv_sdk/details/robot_base/dasher_base.hpp
     ########################
     ## protocol v2 support
     src/protocol_v2/agilex_msg_parser_v2.c

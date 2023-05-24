@@ -9,26 +9,19 @@
 //#include "lib/ugv_sdk/include/ugv_sdk/details/interface/agilex_message.h"
 //#include "lib/ugv_sdk/include/ugv_sdk/details/interface/robot_common_interface.hpp"
 
-#include "ugv_sdk/details/interface/scout_interface.hpp"
+#include "agilex/interface/agilex_message.h"
 
 namespace dasher {
-class DasherCoreState : public westonrobot::ScoutCoreState {
-  public:
-   DasherCoreState(const westonrobot::ScoutCoreState& scout_state)
-      : ScoutCoreState(scout_state) {}
+struct DasherCoreState :  westonrobot::ScoutCoreState {
+
 };
 
+struct DasherActuatorState :  westonrobot::ScoutActuatorState {
 
-class DasherActuatorState : public westonrobot::ScoutActuatorState {
-  public:
-   DasherActuatorState(const westonrobot::ScoutActuatorState& scout_state)
-      : ScoutActuatorState(scout_state) {}
 };
 
-class DasherCommonSensorState : public westonrobot::ScoutCommonSensorState {
-  public:
-   DasherCommonSensorState(const westonrobot::ScoutCommonSensorState& scout_state)
-      : ScoutCommonSensorState(scout_state) {}
+struct DasherCommonSensorState : westonrobot::ScoutCommonSensorState {
+    UltrasonicMessage us_state;
 };
 
 class DasherInterface : public westonrobot::ScoutInterface {

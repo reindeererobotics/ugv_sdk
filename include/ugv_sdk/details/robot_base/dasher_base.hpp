@@ -13,6 +13,10 @@
 //#include "lib/ugv_sdk/include/ugv_sdk/details/interface/scout_interface.hpp"
 //#include "lib/ugv_sdk/include/ugv_sdk/details/robot_base/agilex_base.hpp"
 #include "ugv_sdk/details/robot_base/scout_base.hpp"
+#include "ugv_sdk/details/interface/dasher_interface.hpp"
+#include "reindeere/reindeere_message.h"
+#include "reindeere/dasher_msg_parser.h"
+#include "agilex/interface/agilex_message.h"
 
 namespace dasher {
 class DasherBase : public westonrobot::ScoutBase<westonrobot::ProtocolV2Parser> , public DasherInterface{
@@ -46,19 +50,99 @@ class DasherBase : public westonrobot::ScoutBase<westonrobot::ProtocolV2Parser> 
 
 
   westonrobot::ScoutCoreState GetRobotState() override {
-    return DasherCoreState{ScoutBase::GetRobotState()};
+    return ScoutBase::GetRobotState();
   }
 
   westonrobot::ScoutActuatorState GetActuatorState() override {
-    return DasherActuatorState{ScoutBase::GetActuatorState()};
+    return ScoutBase::GetActuatorState();
+  }
+  
+  private:
+  /*DO NOT USE*/
+  westonrobot::ScoutCommonSensorState GetCommonSensorState() override {
+    return ScoutBase::GetCommonSensorState();
   }
 
-  westonrobot::ScoutCommonSensorState GetCommonSensorState() override{
+  public:
+   DasherCommonSensorState GetSensorState() {
+    DasherCommonSensorState state = ScoutToDasherSensorState(&GetCommonSensorState());
+
     
-    return DasherCommonSensorState{ScoutBase::GetCommonSensorState()};
+
+    return state;
   }
+
+  /*converts a westonrobot::ScoutCommonSensorState` object to a `DasherCommonSensorState` object. 
+  It takes a pointer to a `westonrobot::ScoutCommonSensorState` object as input and returns a `DasherCommonSensorState` object. 
+  The function copies the relevant fields from the `westonrobot::ScoutCommonSensorState` object to the `DasherCommonSensorState` object and returns it.
+  */
+  DasherCommonSensorState ScoutToDasherSensorState(westonrobot::ScoutCommonSensorState* scout){
+    DasherCommonSensorState state;
+    state.bms_basic_state = scout->bms_basic_state;
+    state.time_stamp = scout->time_stamp;
+
+    return state;
+  }
+
+
+  bool Connect(std::string can_name) override {
+    return ConnectPort(can_name,
+                       std::bind(ParseCANFrame_wrapper, this,
+                                 std::placeholders::_1));
+  }
+
+AgilexBase<ParserInterface<ProtocolVersion::AGX_V2>> base = new AgilexBase<ParserInterface<ProtocolVersion::AGX_V2>>();
+
+
+class W_ParseCANFrame {
+public:
+  void ParseCANFrame(can_frame *rx_frame) {
+    ReindeereMessage status_msg;
+
+    if (DecodeDasherFrame(rx_frame, &status_msg)) {
+      &AgilexBase<ParserInterface<ProtocolVersion::AGX_V2>>::UpdateRobotCoreState(ReinToAgxMsg(&status_msg));
+      UpdateActuatorState(ReinToAgxMsg(&status_msg));
+      UpdateCommonSensorState(status_msg);
+      UpdateResponseVersion(ReinToAgxMsg(&status_msg));
+      UpdateMotorState(ReinToAgxMsg(&status_msg));
+    }
+  }
+};
+
+W_ParseCANFrame* parseCANFrame;
+
+ void ParseCANFrame_wrapper(can_frame *rx_frame)
+{
+  parseCANFrame->ParseCANFrame(rx_frame);
+}
+
+
+static void UpdateCommonSensorState(const ReindeereMessage &status_msg) {
+    std::lock_guard<std::mutex> guard(common_sensor_state_mtx_);
+    //    std::cout << common_sensor_state_msgs_.bms_basic_state.battery_soc<<
+    //    std::endl;
+    switch (status_msg.type) {
+      case AgxMsgBmsBasic: {
+        //      std::cout << "system status feedback received" << std::endl;
+        common_sensor_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
+        common_sensor_state_msgs_.bms_basic_state =
+            status_msg.body.bms_basic_msg;
+        break;
+      }
+      case DasherMsgUltrasonic: {
+        common_sensor_state_msgs_.time_stamp =westonrobot::AgxMsgRefClock::now();
+        common_sensor_state_msgs_.us_state = status_msg.body.ultrasonic_msg;
+      }
+      default:
+        break;
+    }
+  }
+
+  
+
 
 };
+
 
 
 }  // namespace dasher

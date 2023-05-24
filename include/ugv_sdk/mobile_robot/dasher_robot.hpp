@@ -35,8 +35,8 @@ class DasherRobot : public westonrobot::ScoutRobot::ScoutRobot{
   ProtocolVersion GetParserProtocolVersion() override;
 
   // get robot state
-  DasherCoreState GetDasherRobotState();
-  DasherActuatorState GetDasherActuatorState();
+  westonrobot::ScoutCoreState GetDasherRobotState();
+  westonrobot::ScoutActuatorState GetDasherActuatorState();
   DasherCommonSensorState GetDasherCommonSensorState();
 
  protected:

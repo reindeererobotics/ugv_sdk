@@ -12,7 +12,7 @@
 
 #include <string>
 
-#include "ugv_sdk/details/interface/agilex_message.h"
+#include "agilex/interface/agilex_message.h"
 #include "ugv_sdk/details/interface/robot_common_interface.hpp"
 
 namespace westonrobot {

@@ -52,12 +52,12 @@ void DasherRobot::SetLightCommand(AgxLightMode f_mode, uint8_t f_value,
   dasher->SetLightCommand(f_mode, f_value, r_mode, r_value);
 }
 
-DasherCoreState DasherRobot::GetDasherRobotState() {
+westonrobot::ScoutCoreState DasherRobot::GetDasherRobotState() {
   auto dasher = dynamic_cast<DasherInterface*>(robot_);
   return dasher->GetRobotState();
 }
 
-DasherActuatorState DasherRobot::GetDasherActuatorState() {
+westonrobot::ScoutActuatorState DasherRobot::GetDasherActuatorState() {
   auto dasher = dynamic_cast<DasherInterface*>(robot_);
   return dasher->GetActuatorState();
 }
