@@ -21,7 +21,6 @@
 #include "ugv_sdk/details/async_port/async_can.hpp"
 #include "ugv_sdk/details/interface/robot_common_interface.hpp"
 #include "ugv_sdk/details/interface/parser_interface.hpp"
-#include "reindeere/reindeere_message.h"
 
 namespace westonrobot {
 template <typename ParserType>
@@ -198,7 +197,7 @@ class AgilexBase : public RobotCommonInterface {
   // communication interface
   std::shared_ptr<AsyncCAN> can_;
 
-  // connect to roboot from CAN or serial
+  // connect to robot from CAN or serial
   using CANFrameRxCallback = AsyncCAN::ReceiveCallback;
   bool ConnectPort(std::string dev_name, CANFrameRxCallback cb) {
     can_ = std::make_shared<AsyncCAN>(dev_name);
@@ -261,6 +260,7 @@ class AgilexBase : public RobotCommonInterface {
   void ParseCANFrame(can_frame *rx_frame) {
     AgxMessage status_msg;
 
+
     if (parser_.DecodeMessage(rx_frame, &status_msg)) {
       UpdateRobotCoreState(status_msg);
       UpdateActuatorState(status_msg);
@@ -270,7 +270,7 @@ class AgilexBase : public RobotCommonInterface {
     }
   }
 
-  void UpdateRobotCoreState(const AgxMessage &status_msg) {
+ void UpdateRobotCoreState(const AgxMessage &status_msg) {
     std::lock_guard<std::mutex> guard(core_state_mtx_);
     switch (status_msg.type) {
       case AgxMsgSystemState: {
