@@ -62,6 +62,11 @@ westonrobot::ScoutActuatorState DasherRobot::GetDasherActuatorState() {
   return dasher->GetActuatorState();
 }
 
+DasherCommonSensorState DasherRobot::GetDasherCommonSensorState() {
+  auto dasher = dynamic_cast<DasherInterface*>(robot_);
+  return dasher->GetSensorState();
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 }  // namespace dasher

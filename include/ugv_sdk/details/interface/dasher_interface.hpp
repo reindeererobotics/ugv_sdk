@@ -41,6 +41,7 @@ class DasherInterface : public westonrobot::ScoutInterface {
    virtual westonrobot::ScoutCoreState GetRobotState() = 0;
    virtual westonrobot::ScoutActuatorState GetActuatorState() = 0;
    virtual westonrobot::ScoutCommonSensorState GetCommonSensorState() = 0;
+   virtual DasherCommonSensorState GetSensorState() = 0;
 };
 
 
