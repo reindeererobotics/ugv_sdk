@@ -19,43 +19,13 @@ using namespace westonrobot;
 using namespace dasher;
 
 int main(int argc, char **argv) {
-  std::string device_name="can0";
-  std::string robot_subtype="dasher";
-
-  // argv[1] = ;
-
-  // if (argc == 2) {
-  //   device_name = {argv[1]};
-  //   std::cout << "Selected interface " << device_name << ", robot type: dasher"
-  //             << std::endl;
-  // } else if (argc == 3) {
-  //   robot_subtype = {argv[1]};
-  //   device_name = {argv[2]};
-  //   std::cout << "Selected interface " << device_name
-  //             << ", robot type: " << robot_subtype << std::endl;
-  // } else {
-  //   std::cout << "Usage: demo_dasher_robot [<robot-subtype>] <interface>"
-  //             << std::endl
-  //             << "Example 1: ./demo_dasher_robot can0" << std::endl
-  //             << "\t <robot-subtype>: mini" << std::endl;
-  //   return -1;
-  // }
-
-  // bool is_dasher_mini = false;
-  // if (robot_subtype == "mini") {
-  //   is_dasher_mini = true;
-  // } else if (!robot_subtype.empty() && robot_subtype != "dasher") {
-  //   std::cout
-  //       << "Unkonwn robot subtype. Supported subtypes: \"dasher\" or \"mini\""
-  //       << std::endl;
-  // }
 
   std::unique_ptr<DasherRobot> dasher = std::unique_ptr<DasherRobot>( new DasherRobot());
 
   if (dasher == nullptr)
     std::cout << "Failed to create robot object" << std::endl;
 
-  dasher->Connect(device_name);
+  dasher->Connect("can0");
 
   if (dasher->GetParserProtocolVersion() == ProtocolVersion::AGX_V2) {
     dasher->EnableCommandedMode();
