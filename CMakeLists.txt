@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.1)
+cmake_minimum_required(VERSION 3.5.1...3.21)
 project(ugv_sdk VERSION 0.2.0)
 
 find_program(CCACHE_PROGRAM ccache)
@@ -20,13 +20,13 @@ if(CATKIN_DEVEL_PREFIX)
     find_package(catkin REQUIRED)
     catkin_package(
         LIBRARIES ${PROJECT_NAME}
-        INCLUDE_DIRS include 
+        INCLUDE_DIRS include
         # CATKIN_DEPENDS async_port
         # DEPENDS system_lib
     )
 else()
     message(STATUS "Build package with cmake")
-    set(BUILD_WITHOUT_ROS ON)    
+    set(BUILD_WITHOUT_ROS ON)
 endif()
 
 ## Generate symbols for IDE indexer
@@ -37,7 +37,7 @@ if(STATIC_CHECK)
     if(CPPCHECK)
         message(STATUS "Found cppcheck")
         set(CMAKE_CXX_CPPCHECK cppcheck;--std=c++11;--enable=all)
-    endif() 
+    endif()
 endif()
 
 ## Additional cmake module path
@@ -82,6 +82,19 @@ if(BUILD_WITHOUT_ROS)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 endif()
 
+# Fetching robotdataparser
+include(FetchContent)
+set(FETCHCONTENT_UPDATES_DISCONNECTED_ROBOTDATAPARSER ON)
+FetchContent_Declare(
+    robotDataParser
+    GIT_REPOSITORY https://github.com/reindeererobotics/robotDataParser.git
+    GIT_TAG task/ugv_sdk_integration_fix
+    GIT_SHALLOW TRUE  # only fetches a subset of the repository's history, starting from the specified commit or branch
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/robotDataParser
+    )
+
+FetchContent_MakeAvailable(robotDataParser)
+
 ## Build libraries
 find_package(Threads REQUIRED)
 
@@ -99,6 +112,8 @@ add_library(${PROJECT_NAME}
     src/mobile_robot/scout_robot.cpp
     src/mobile_robot/hunter_robot.cpp
     src/mobile_robot/bunker_robot.cpp
+    src/mobile_robot/dasher_robot.cpp
+    include/ugv_sdk/details/robot_base/dasher_base.hpp
     ########################
     ## protocol v2 support
     src/protocol_v2/agilex_msg_parser_v2.c
@@ -107,13 +122,13 @@ add_library(${PROJECT_NAME}
     ## legacy protocol v1 support (transparent to user)
     src/protocol_v1/agilex_msg_parser_v1.c
 )
-target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
+target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads robotDataParser)
 target_compile_definitions(${PROJECT_NAME} PUBLIC ASIO_ENABLE_OLD_SERVICES)
 target_include_directories(${PROJECT_NAME} PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
-    
+
 # Build demo
 if(BUILD_WITHOUT_ROS)
     add_subdirectory(sample)
@@ -147,7 +162,7 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
     endforeach()
 
     # targets to install
-    install(TARGETS ${PROJECT_NAME} 
+    install(TARGETS ${PROJECT_NAME}
         EXPORT ugv_sdkTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
@@ -157,7 +172,7 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
     install(DIRECTORY include/ugv_sdk
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-    # export target configuration 
+    # export target configuration
     include(CMakePackageConfigHelpers)
     write_basic_package_version_file(
         ugv_sdkConfigVersion.cmake
@@ -186,7 +201,7 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
 
     set(CPACK_GENERATOR "DEB")
     set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
-    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Ruixiang Du (ruixiang.du@westonrobot.com)") 
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Ruixiang Du (ruixiang.du@westonrobot.com)")
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "libasio-dev")
     set(CPACK_SOURCE_IGNORE_FILES .git dist .*build.* /\\\\.DS_Store)
     include(CPack)

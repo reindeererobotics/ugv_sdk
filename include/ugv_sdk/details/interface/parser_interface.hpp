@@ -24,7 +24,7 @@ struct can_frame {
 };
 #endif
 
-#include "ugv_sdk/details/interface/agilex_message.h"
+#include "agilex/interface/agilex_message.h"
 
 enum class ProtocolVersion { UNKONWN, AGX_V1, AGX_V2 };
 
