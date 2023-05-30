@@ -88,7 +88,7 @@ set(FETCHCONTENT_UPDATES_DISCONNECTED_ROBOTDATAPARSER ON)
 FetchContent_Declare(
     robotDataParser
     GIT_REPOSITORY https://github.com/reindeererobotics/robotDataParser.git
-    GIT_TAG task/ugv_sdk_integration_fix
+    GIT_TAG dev
     GIT_SHALLOW TRUE  # only fetches a subset of the repository's history, starting from the specified commit or branch
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/robotDataParser
     )
