@@ -371,6 +371,7 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
       break;
     }
     default:
+    return false;
       break;
   }
 
