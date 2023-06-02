@@ -18,16 +18,18 @@
 using namespace westonrobot;
 using namespace dasher;
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
 
-  std::unique_ptr<DasherRobot> dasher = std::unique_ptr<DasherRobot>( new DasherRobot());
+  std::unique_ptr<DasherRobot> dasher = std::unique_ptr<DasherRobot>(new DasherRobot());
 
   if (dasher == nullptr)
     std::cout << "Failed to create robot object" << std::endl;
 
   dasher->Connect("can0");
 
-  if (dasher->GetParserProtocolVersion() == ProtocolVersion::AGX_V2) {
+  if (dasher->GetParserProtocolVersion() == ProtocolVersion::AGX_V2)
+  {
     dasher->EnableCommandedMode();
   }
 
@@ -47,13 +49,14 @@ int main(int argc, char **argv) {
   dasher->SetLightCommand(CONST_OFF, 0, CONST_OFF, 0);
 
   int count = 0;
-  while (true) {
+  while (true)
+  {
     // motion control
     std::cout << "Motor: 1.0, 0" << std::endl;
     dasher->SetMotionCommand(1.0, 0.0);
 
     // get robot state
-    auto state = dasher->GetRobotState();
+    auto state = dasher->GetDasherRobotState();
     std::cout << "-------------------------------" << std::endl;
     std::cout << "count: " << count << std::endl;
     std::cout << "control mode: "
@@ -73,9 +76,11 @@ int main(int argc, char **argv) {
                      .count()
               << std::endl;
 
-    auto actuator = dasher->GetActuatorState();
-    if (dasher->GetParserProtocolVersion() == ProtocolVersion::AGX_V1) {
-      for (int i = 0; i < 4; ++i) {
+    auto actuator = dasher->GetDasherActuatorState();
+    if (dasher->GetParserProtocolVersion() == ProtocolVersion::AGX_V1)
+    {
+      for (int i = 0; i < 4; ++i)
+      {
         printf("motor %d: current %f, rpm %d, driver temp %f, motor temp %f\n",
                actuator.actuator_state[i].motor_id,
                actuator.actuator_state[i].current,
@@ -88,8 +93,11 @@ int main(int argc, char **argv) {
                        AgxMsgRefClock::now() - actuator.time_stamp)
                        .count()
                 << std::endl;
-    } else {
-      for (int i = 0; i < 4; ++i) {
+    }
+    else
+    {
+      for (int i = 0; i < 4; ++i)
+      {
         printf("motor %d: current %f, rpm %d, driver temp %f, motor temp %f\n",
                actuator.actuator_hs_state[i].motor_id,
                actuator.actuator_hs_state[i].current,
@@ -103,6 +111,19 @@ int main(int argc, char **argv) {
                        .count()
                 << std::endl;
     }
+    std::cout << "-------------------------------" << std::endl;
+
+    auto sensor_state = dasher->GetDasherCommonSensorState();
+
+    printf("bms_basic_state.battery_soc %d: bms_basic_state.battery_soh %d, bms_basic_state.temperature %f, bms_basic_state.voltage %f, bms_basic_state.current %f, us_state.distance %d, us_state.sensor_id %d \n",
+           sensor_state.bms_basic_state.battery_soc,
+           sensor_state.bms_basic_state.battery_soh,
+           sensor_state.bms_basic_state.temperature,
+           sensor_state.bms_basic_state.voltage,
+           sensor_state.bms_basic_state.current,
+           sensor_state.us_state.distance[0],
+           sensor_state.us_state.sensor_id);
+
     std::cout << "-------------------------------" << std::endl;
 
     usleep(20000);

@@ -59,7 +59,7 @@ class DasherBase : public westonrobot::ScoutBase<westonrobot::ProtocolV2Parser> 
   westonrobot::ScoutActuatorState GetActuatorState() override {
     return ScoutBase::GetActuatorState();
   }
-  
+
   private:
   /*DO NOT USE*/
   westonrobot::ScoutCommonSensorState GetCommonSensorState() override {
@@ -67,15 +67,23 @@ class DasherBase : public westonrobot::ScoutBase<westonrobot::ProtocolV2Parser> 
   }
 
   public:
-   DasherCommonSensorState GetSensorState() {
-    auto scout_state = GetCommonSensorState();
-    DasherCommonSensorState state = ScoutToDasherSensorState(&scout_state);
-    
-    return state;
+
+ DasherCommonSensorState GetSensorState() {
+    auto common_sensor = AgilexBase<westonrobot::ProtocolV2Parser>::GetCommonSensorStateMsgGroup();
+
+    DasherCommonSensorState dasher_common_sensor;
+
+    dasher_common_sensor.time_stamp = common_sensor.time_stamp;
+    dasher_common_sensor.bms_basic_state = common_sensor.bms_basic_state;
+    dasher_common_sensor.us_state = common_sensor.us_state;
+
+//    std::cout << static_cast<unsigned int>(scout_common_sensor.bms_basic_state.battery_soc) << std::endl;
+
+    return dasher_common_sensor;
   }
 
-  /*converts a westonrobot::ScoutCommonSensorState` object to a `DasherCommonSensorState` object. 
-  It takes a pointer to a `westonrobot::ScoutCommonSensorState` object as input and returns a `DasherCommonSensorState` object. 
+  /*converts a westonrobot::ScoutCommonSensorState` object to a `DasherCommonSensorState` object.
+  It takes a pointer to a `westonrobot::ScoutCommonSensorState` object as input and returns a `DasherCommonSensorState` object.
   The function copies the relevant fields from the `westonrobot::ScoutCommonSensorState` object to the `DasherCommonSensorState` object and returns it.
   */
   DasherCommonSensorState ScoutToDasherSensorState(westonrobot::ScoutCommonSensorState* scout){
@@ -176,7 +184,7 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
     }
   }
 
-  
+
  void UpdateCommonSensorState(const ReindeereMessage &status_msg) {
     std::lock_guard<std::mutex> guard(common_sensor_state_mtx_);
     //    std::cout << common_sensor_state_msgs_.bms_basic_state.battery_soc<<
@@ -198,7 +206,7 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
     }
   }
 
-  
+
 void UpdateResponseVersion(const ReindeereMessage &status_msg) {
     switch (status_msg.type) {
       case AgxMsgVersionResponse: {
