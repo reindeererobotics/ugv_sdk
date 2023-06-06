@@ -90,7 +90,7 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/reindeererobotics/robotDataParser.git
     GIT_TAG dev
     GIT_SHALLOW TRUE  # only fetches a subset of the repository's history, starting from the specified commit or branch
-    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/robotDataParser
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/robotdataparser
     )
 
 FetchContent_MakeAvailable(robotDataParser)
@@ -122,7 +122,7 @@ add_library(${PROJECT_NAME}
     ## legacy protocol v1 support (transparent to user)
     src/protocol_v1/agilex_msg_parser_v1.c
 )
-target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads robotDataParser)
+target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads robotdataparser)
 target_compile_definitions(${PROJECT_NAME} PUBLIC ASIO_ENABLE_OLD_SERVICES)
 target_include_directories(${PROJECT_NAME} PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -162,7 +162,7 @@ if(BUILD_WITHOUT_ROS) # BUILD_WITHOUT_ROS
     endforeach()
 
     # targets to install
-    install(TARGETS ${PROJECT_NAME}
+    install(TARGETS ${PROJECT_NAME} robotdataparser
         EXPORT ugv_sdkTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
