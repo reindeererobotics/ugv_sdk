@@ -14,7 +14,7 @@
 #include <chrono>
 #include <stdexcept>
 
-#include "ugv_sdk/details/interface/agilex_message.h"
+#include "agilex/interface/agilex_message.h"
 #include "ugv_sdk/details/interface/parser_interface.hpp"
 
 #define AGX_MAX_ACTUATOR_NUM 8
@@ -46,8 +46,9 @@ struct ActuatorStateMsgGroup {
 
 struct CommonSensorStateMsgGroup {
   AgxMsgTimeStamp time_stamp;
-
   BmsBasicMessage bms_basic_state;
+  UltrasonicMessage us_state;
+  
 };
 
 class RobotCommonInterface {

@@ -11,6 +11,7 @@ robot and receiving the latest robot state. The repository is a joint effort by 
 - Copyright (c) 2020-2023 [Weston Robot](https://www.westonrobot.com/)
 - Copyright (c) 2020-2023 [AgileX Robotics](http://www.agilex.ai/?lang=zh-cn)
 
+
 Please create an issue on Github at https://github.com/westonrobot/ugv_sdk/issues if you encounter any problems when
 using the packages.
 
@@ -62,7 +63,13 @@ $ cd ..
 $ catkin_make
 ```
 
-## Setup CAN-To-USB Adapter
+### Build with cmake
+```sh
+cmake -S . -B build -G Ninja # omit '-G Ninja' if using Unix Makefile Generator
+cmake --build ./build/
+```
+
+## Setup CAN-To-USB adapter
 
 1. Enable gs_usb kernel module
     ```
