@@ -12,8 +12,10 @@
 
 #include "stdio.h"
 #include "string.h"
+#include "math.h"
 
 bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
+  bool ret = true;
   msg->type = AgxMsgUnkonwn;
 
   switch (rx_frame->can_id) {
@@ -334,19 +336,19 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
       msg->body.motor_angle_msg.angle_5 =
           (int16_t)((uint16_t)(frame->angle_5.low_byte) |
                     (uint16_t)(frame->angle_5.high_byte) << 8) *
-          0.01;
+          0.001;
       msg->body.motor_angle_msg.angle_6 =
           (int16_t)((uint16_t)(frame->angle_6.low_byte) |
                     (uint16_t)(frame->angle_6.high_byte) << 8) *
-          0.01;
+          0.001;
       msg->body.motor_angle_msg.angle_7 =
           (int16_t)((uint16_t)(frame->angle_7.low_byte) |
                     (uint16_t)(frame->angle_7.high_byte) << 8) *
-          0.01;
+          0.001;
       msg->body.motor_angle_msg.angle_8 =
           (int16_t)((uint16_t)(frame->angle_8.low_byte) |
                     (uint16_t)(frame->angle_8.high_byte) << 8) *
-          0.01;
+          0.001;
       break;
     }
     case CAN_MSG_MOTOR_SPEED_INFO: {
@@ -371,11 +373,11 @@ bool DecodeCanFrameV2(const struct can_frame *rx_frame, AgxMessage *msg) {
       break;
     }
     default:
-    return false;
+      ret = false;
       break;
   }
 
-  return true;
+  return ret;
 }
 
 bool EncodeCanFrameV2(const AgxMessage *msg, struct can_frame *tx_frame) {
