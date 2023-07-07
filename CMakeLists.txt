@@ -90,7 +90,7 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/reindeererobotics/robotDataParser.git
     GIT_TAG dev
     GIT_SHALLOW TRUE  # only fetches a subset of the repository's history, starting from the specified commit or branch
-    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs/robotdataparser
+    SOURCE_DIR ${CMAKE_SOURCE_DIR}/libs/robotdataparser
     )
 
 FetchContent_MakeAvailable(robotDataParser)

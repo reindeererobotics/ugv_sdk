@@ -108,7 +108,6 @@ void ParseCANFrame(can_frame *rx_frame) {
       UpdateActuatorState(status_msg);
       UpdateCommonSensorState(status_msg);
       UpdateResponseVersion(status_msg);
-      UpdateMotorState(status_msg);
     }
   }
 
@@ -154,7 +153,30 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
 
  void UpdateActuatorState(const ReindeereMessage &status_msg) {
     std::lock_guard<std::mutex> guard(actuator_state_mtx_);
+   actuator_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
     switch (status_msg.type) {
+      case AgxMsgMotorAngle: {
+        actuator_state_msgs_.motor_angles.angle_5 =
+            status_msg.body.motor_angle_msg.angle_5;
+        actuator_state_msgs_.motor_angles.angle_6 =
+            status_msg.body.motor_angle_msg.angle_6;
+        actuator_state_msgs_.motor_angles.angle_7 =
+            status_msg.body.motor_angle_msg.angle_7;
+        actuator_state_msgs_.motor_angles.angle_8 =
+            status_msg.body.motor_angle_msg.angle_8;
+        break;
+      }
+      case AgxMsgMotorSpeed: {
+        actuator_state_msgs_.motor_speeds.speed_1 =
+            status_msg.body.motor_speed_msg.speed_1;
+        actuator_state_msgs_.motor_speeds.speed_2 =
+            status_msg.body.motor_speed_msg.speed_2;
+        actuator_state_msgs_.motor_speeds.speed_3 =
+            status_msg.body.motor_speed_msg.speed_3;
+        actuator_state_msgs_.motor_speeds.speed_4 =
+            status_msg.body.motor_speed_msg.speed_4;
+        break;
+      }
       case AgxMsgActuatorHSState: {
         // std::cout << "actuator hs feedback received" << std::endl;
         actuator_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
@@ -222,32 +244,7 @@ void UpdateResponseVersion(const ReindeereMessage &status_msg) {
         break;
     }
   }
-
-
- void UpdateMotorState(const ReindeereMessage &status_msg) {
-    std::lock_guard<std::mutex> guard(motor_state_mtx_);
-    switch (status_msg.type) {
-      case AgxMsgMotorAngle: {
-        motor_msgs.MoterAngle.angle_5 = status_msg.body.motor_angle_msg.angle_5;
-        motor_msgs.MoterAngle.angle_6 = status_msg.body.motor_angle_msg.angle_6;
-        motor_msgs.MoterAngle.angle_7 = status_msg.body.motor_angle_msg.angle_7;
-        motor_msgs.MoterAngle.angle_8 = status_msg.body.motor_angle_msg.angle_8;
-        break;
-      }
-      case AgxMsgMotorSpeed: {
-        motor_msgs.MoterSpeed.speed_1 = status_msg.body.motor_speed_msg.speed_1;
-        motor_msgs.MoterSpeed.speed_2 = status_msg.body.motor_speed_msg.speed_2;
-        motor_msgs.MoterSpeed.speed_3 = status_msg.body.motor_speed_msg.speed_3;
-        motor_msgs.MoterSpeed.speed_4 = status_msg.body.motor_speed_msg.speed_4;
-        break;
-      }
-      default:
-        break;
-    }
-  }
-
-
-};
+  };
 
 
 
