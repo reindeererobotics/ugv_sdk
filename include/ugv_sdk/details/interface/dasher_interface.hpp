@@ -10,6 +10,7 @@
 //#include "lib/ugv_sdk/include/ugv_sdk/details/interface/robot_common_interface.hpp"
 
 #include "agilex/interface/agilex_message.h"
+#include "reindeere/interface/reindeere_message.h"
 
 namespace dasher {
 struct DasherCoreState :  westonrobot::ScoutCoreState {
@@ -22,6 +23,12 @@ struct DasherActuatorState :  westonrobot::ScoutActuatorState {
 
 struct DasherCommonSensorState : westonrobot::ScoutCommonSensorState {
     UltrasonicMessage us_state;
+    ImuAccelMessage imu_accel_state;
+    ImuGravMessage imu_grav_state;
+    ImuMagMessage imu_mag_state;
+    ImuGyroMessage imu_gyro_state;
+    ImuQuatMessage imu_quat_state;
+    ImuEulerMessage imu_euler_state;
 };
 
 class DasherInterface : public westonrobot::ScoutInterface {
