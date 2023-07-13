@@ -17,6 +17,8 @@
 #include "agilex/interface/agilex_message.h"
 #include "ugv_sdk/details/interface/parser_interface.hpp"
 
+#include "reindeere/interface/reindeere_message.h"
+
 #define AGX_MAX_ACTUATOR_NUM 8
 
 namespace westonrobot {
@@ -48,7 +50,13 @@ struct CommonSensorStateMsgGroup {
   AgxMsgTimeStamp time_stamp;
   BmsBasicMessage bms_basic_state;
   UltrasonicMessage us_state;
-  
+
+  ImuAccelMessage imu_accel_state;
+  ImuGravMessage imu_grav_state;
+  ImuMagMessage imu_mag_state;
+  ImuGyroMessage imu_gyro_state;
+  ImuQuatMessage imu_quat_state;
+  ImuEulerMessage imu_euler_state;
 };
 
 class RobotCommonInterface {

@@ -77,6 +77,13 @@ class DasherBase : public westonrobot::ScoutBase<westonrobot::ProtocolV2Parser> 
     dasher_common_sensor.bms_basic_state = common_sensor.bms_basic_state;
     dasher_common_sensor.us_state = common_sensor.us_state;
 
+    dasher_common_sensor.imu_accel_state = common_sensor.imu_accel_state;
+    dasher_common_sensor.imu_grav_state = common_sensor.imu_grav_state;
+    dasher_common_sensor.imu_gyro_state = common_sensor.imu_gyro_state;
+    dasher_common_sensor.imu_mag_state = common_sensor.imu_mag_state;
+    dasher_common_sensor.imu_quat_state = common_sensor.imu_quat_state;
+    dasher_common_sensor.imu_euler_state = common_sensor.imu_euler_state;
+
 //    std::cout << static_cast<unsigned int>(scout_common_sensor.bms_basic_state.battery_soc) << std::endl;
 
     return dasher_common_sensor;
