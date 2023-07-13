@@ -124,6 +124,29 @@ int main(int argc, char **argv)
            sensor_state.us_state.distance[0],
            sensor_state.us_state.sensor_id);
 
+    printf("imu_accel_state{x,y,z}: %f,%f,%f",
+                                              sensor_state.imu_accel_state.accel_x,
+                                              sensor_state.imu_accel_state.accel_y,
+                                              sensor_state.imu_accel_state.accel_z);
+    
+    printf("imu_gyro_state{x,y,z}: %f,%f,%f",
+                                              sensor_state.imu_gyro_state.gyro_x,
+                                              sensor_state.imu_gyro_state.gyro_y,
+                                              sensor_state.imu_gyro_state.gyro_z);
+    printf("imu_mag_state{x,y,z}: %f,%f,%f",
+                                              sensor_state.imu_mag_state.mag_x,
+                                              sensor_state.imu_mag_state.mag_y,
+                                              sensor_state.imu_mag_state.mag_z);
+    printf("imu_grav_state{x,y,z}: %f,%f,%f",
+                                              sensor_state.imu_grav_state.grav_x,
+                                              sensor_state.imu_grav_state.grav_y,
+                                              sensor_state.imu_grav_state.grav_z);
+    printf("imu_quat_state{w,x,y,z}: %f,%f,%f,%f",
+                                              sensor_state.imu_quat_state.quat_x,
+                                              sensor_state.imu_quat_state.quat_x,
+                                              sensor_state.imu_quat_state.quat_y,
+                                              sensor_state.imu_quat_state.quat_z);
+
     std::cout << "-------------------------------" << std::endl;
 
     usleep(20000);
