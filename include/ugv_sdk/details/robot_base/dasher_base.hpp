@@ -233,32 +233,32 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
       }
       case DasherMsgImuAccel: {
         common_sensor_state_msgs_.imu_accel_state =
-            common_sensor_state_msgs_.imu_accel_state;
+            status_msg.body.imu_accel_state;
         break;
       }
       case DasherMsgImuEuler: {
         common_sensor_state_msgs_.imu_euler_state =
-            common_sensor_state_msgs_.imu_euler_state;
+            status_msg.body.imu_euler_state;
         break;
       }
       case DasherMsgImuGrav: {
         common_sensor_state_msgs_.imu_grav_state =
-            common_sensor_state_msgs_.imu_grav_state;
+            status_msg.body.imu_grav_state;
         break;
       }
       case DasherMsgImuGyro: {
         common_sensor_state_msgs_.imu_gyro_state =
-            common_sensor_state_msgs_.imu_gyro_state;
+            status_msg.body.imu_gyro_state;
         break;
       }
       case DasherMsgImuMag: {
         common_sensor_state_msgs_.imu_mag_state =
-            common_sensor_state_msgs_.imu_mag_state;
+            status_msg.body.imu_mag_state;
         break;
       }
       case DasherMsgImuQuat: {
         common_sensor_state_msgs_.imu_quat_state=
-            common_sensor_state_msgs_.imu_quat_state;
+            status_msg.body.imu_quat_state;
         break;
       }
       default:
