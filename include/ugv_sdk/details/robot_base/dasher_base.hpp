@@ -229,6 +229,37 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
       case DasherMsgUltrasonic: {
         common_sensor_state_msgs_.time_stamp =westonrobot::AgxMsgRefClock::now();
         common_sensor_state_msgs_.us_state = status_msg.body.ultrasonic_msg;
+        break;
+      }
+      case DasherMsgImuAccel: {
+        common_sensor_state_msgs_.imu_accel_state =
+            common_sensor_state_msgs_.imu_accel_state;
+        break;
+      }
+      case DasherMsgImuEuler: {
+        common_sensor_state_msgs_.imu_euler_state =
+            common_sensor_state_msgs_.imu_euler_state;
+        break;
+      }
+      case DasherMsgImuGrav: {
+        common_sensor_state_msgs_.imu_grav_state =
+            common_sensor_state_msgs_.imu_grav_state;
+        break;
+      }
+      case DasherMsgImuGyro: {
+        common_sensor_state_msgs_.imu_gyro_state =
+            common_sensor_state_msgs_.imu_gyro_state;
+        break;
+      }
+      case DasherMsgImuMag: {
+        common_sensor_state_msgs_.imu_mag_state =
+            common_sensor_state_msgs_.imu_mag_state;
+        break;
+      }
+      case DasherMsgImuQuat: {
+        common_sensor_state_msgs_.imu_quat_state=
+            common_sensor_state_msgs_.imu_quat_state;
+        break;
       }
       default:
         break;
