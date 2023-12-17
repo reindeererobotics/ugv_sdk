@@ -14,8 +14,8 @@
 #include <chrono>
 #include <stdexcept>
 
-#include "agilex/interface/agilex_message.h"
-#include "ugv_sdk/details/interface/parser_interface.hpp"
+#include "ugv_sdk/details/interface/agilex_message.h"
+#include "ugv_sdk/details/parser_base.hpp"
 
 #include "reindeere/interface/reindeere_message.h"
 
@@ -58,6 +58,8 @@ struct CommonSensorStateMsgGroup {
   ImuQuatMessage imu_quat_state;
   ImuEulerMessage imu_euler_state;
 };
+using SdkClock = std::chrono::steady_clock;
+using SdkTimePoint = std::chrono::time_point<SdkClock>;
 
 class RobotCommonInterface {
  public:
@@ -71,10 +73,6 @@ class RobotCommonInterface {
   virtual bool Connect(std::string can_name) = 0;
 
   virtual void ResetRobotState() = 0;
-
-  virtual void DisableLightControl() {
-    // do nothing if no light on robot
-  }
 
   virtual ProtocolVersion GetParserProtocolVersion() = 0;
 

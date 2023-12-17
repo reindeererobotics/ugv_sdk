@@ -40,7 +40,7 @@ It should also work in other similar Linux environments but only the above liste
 |   Ranger Mini 2.0   |      -      |      Y      |   -   |   Y   |     Active     |
 |       Ranger        |      -      |      Y      |   -   |   Y   |     Active     |
 
-**Important note:**
+**Important note:** 
 
 * The main branch of this repository supports all robot models and both V1 and V2 protocol. Earlier versions of the SDK can be found in v1.x and v2.x branch for V1 and V2 protocol support respectively. These two branches are not actively maintained any longer and are only kept for reference.
 * \* Ranger Mini 1.0 uses a modified version of Protocol V2. A few CAN messages and the reference frame definitions are inconsistent with other robot bases. Since this model has been discontinued by AgileX (as in May 2023), no new firmware will be released to fix this issue on Ranger Mini 1.0. Thus, a fix is provided for Ranger Mini 1.0 at the SDK level. You should use "class RangerMiniV1Robot" for Ranger Mini 1.0 to get consistent behaviors, as compared to Ranger and Ranger Mini 2.0.
@@ -157,9 +157,9 @@ The complete pipeline from the robot base to a ROS application is illustrated in
 
 ![Interface Hierarchy](./docs/interface_hierarchy.png)
 
-With this structure in mind, whenever you are facing issues communicating with the robot, you can follow the pipeline to locate the cause of the problem:
+With this structure in mind, whenever you are facing issues communicating with the robot, you can follow the pipeline to locate the cause of the problem: 
 
-* First try to use "candump" to check if the CAN communication is working properly. If no CAN message is received from the CAN bus, it means that either the robot controller or the CAN adapter or the CAN wiring has issues.
+* First try to use "candump" to check if the CAN communication is working properly. If no CAN message is received from the CAN bus, it means that either the robot controller or the CAN adapter or the CAN wiring has issues. 
 * If there is no issue found on the CAN bus, you can try to use the SDK to query robot state and control the robot to move. Since the SDK is mainly acting as a CAN message translator, if the CAN bus is normal, then most likely you can successfully talk with the robot using the SDK. Otherwise, you can report an issue with the SDK.
 * If there is no issue found in the SDK, then you may need to check if your ROS environment is set up properly (e.g. the ROS network setup).
 

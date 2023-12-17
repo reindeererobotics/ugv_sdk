@@ -30,10 +30,6 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
     return AgilexBase<ParserType>::Connect(can_name);
   }
 
-  void Connect(std::string uart_name, uint32_t baudrate) override {
-    // TODO
-  }
-
   // robot control
   void SetMotionCommand(double linear_vel, double angular_vel) override {
     AgilexBase<ParserType>::SendMotionCommand(linear_vel, angular_vel, 0.0,
@@ -46,6 +42,10 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
     AgilexBase<ParserType>::SendLightCommand(f_mode, f_value, r_mode, r_value);
   }
 
+  void DisableLightControl() override {
+    AgilexBase<ParserType>::DisableLightControl();
+  }
+
   // get robot state
   ScoutCoreState GetRobotState() override {
     auto state = AgilexBase<ParserType>::GetRobotCoreStateMsgGroup();
@@ -56,6 +56,7 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
     scout_state.motion_state = state.motion_state;
     scout_state.light_state = state.light_state;
     scout_state.rc_state = state.rc_state;
+    scout_state.bms_basic_state = state.bms_basic_state;
     return scout_state;
   }
 
@@ -70,19 +71,6 @@ class ScoutBase : public AgilexBase<ParserType>, public ScoutInterface {
       scout_actuator.actuator_state[i] = actuator.actuator_state[i];
     }
     return scout_actuator;
-  }
-
-  ScoutCommonSensorState GetCommonSensorState() override {
-    auto common_sensor = AgilexBase<ParserType>::GetCommonSensorStateMsgGroup();
-
-    ScoutCommonSensorState scout_common_sensor;
-
-    scout_common_sensor.time_stamp = common_sensor.time_stamp;
-    scout_common_sensor.bms_basic_state = common_sensor.bms_basic_state;
-    //    std::cout << static_cast<unsigned
-    //    int>(scout_common_sensor.bms_basic_state.battery_soc) << std::endl;
-
-    return scout_common_sensor;
   }
 };
 
