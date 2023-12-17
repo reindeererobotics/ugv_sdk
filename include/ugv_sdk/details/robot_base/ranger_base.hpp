@@ -47,6 +47,10 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
                                                    r_value);
   }
 
+  void DisableLightControl() override {
+    AgilexBase<ProtocolV2Parser>::DisableLightControl();
+  }
+
   // get robot state
   RangerCoreState GetRobotState() override {
     auto state = AgilexBase<ProtocolV2Parser>::GetRobotCoreStateMsgGroup();
@@ -58,6 +62,19 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
     ranger_state.light_state = state.light_state;
     ranger_state.rc_state = state.rc_state;
     ranger_state.motion_mode_state = state.motion_mode_state;
+
+    ranger_state.bms_basic_state.current = state.bms_basic_state.current;
+    // Note: BMS CAN message definition is not consistent across AgileX robots.
+    // Robots with steering mechanism should additionally divide the voltage by
+    // 10.
+    ranger_state.bms_basic_state.voltage = state.bms_basic_state.voltage * 0.1f;
+    ranger_state.bms_basic_state.battery_soc =
+        state.bms_basic_state.battery_soc;
+    ranger_state.bms_basic_state.battery_soh =
+        state.bms_basic_state.battery_soh;
+    ranger_state.bms_basic_state.temperature =
+        state.bms_basic_state.temperature;
+
     return ranger_state;
   }
 
@@ -82,30 +99,6 @@ class RangerBaseV2 : public AgilexBase<ProtocolV2Parser>,
     }
     return ranger_actuator;
   }
-
-  RangerCommonSensorState GetCommonSensorState() override {
-    auto common_sensor =
-        AgilexBase<ProtocolV2Parser>::GetCommonSensorStateMsgGroup();
-
-    RangerCommonSensorState ranger_bms;
-
-    ranger_bms.time_stamp = common_sensor.time_stamp;
-
-    ranger_bms.bms_basic_state.current = common_sensor.bms_basic_state.current;
-    // Note: BMS CAN message definition is not consistent across AgileX robots.
-    // Robots with steering mechanism should additionally divide the voltage by
-    // 10.
-    ranger_bms.bms_basic_state.voltage =
-        common_sensor.bms_basic_state.voltage * 0.1f;
-    ranger_bms.bms_basic_state.battery_soc =
-        common_sensor.bms_basic_state.battery_soc;
-    ranger_bms.bms_basic_state.battery_soh =
-        common_sensor.bms_basic_state.battery_soh;
-    ranger_bms.bms_basic_state.temperature =
-        common_sensor.bms_basic_state.temperature;
-
-    return ranger_bms;
-  }
 };
 
 // Note: Ranger Mini V1 uses a modified AgileX V2 protocol
@@ -117,6 +110,15 @@ class RangerMiniV1Base : public RangerBaseV2 {
   ~RangerMiniV1Base() = default;
 
   // robot control
+  void SetMotionMode(uint8_t mode) override {
+    if (mode == RangerInterface::MotionMode::kPark) {
+      return;
+    } else if (mode == RangerInterface::MotionMode::kSideSlip) {
+      mode = 3;
+    }
+    AgilexBase::SetMotionMode(mode);
+  }
+
   void SetMotionCommand(double linear_vel, double steer_angle,
                         double angular_vel) override {
     auto state = GetRobotState();
