@@ -1,10 +1,12 @@
 /*
- * scout_robot_demo.cpp
+ * dasher_robot_demo.cpp
  *
  * Created on: Jul 08, 2021 11:12
  * Description:
  *
- * Copyright (c) 2021 Weston Robot Pte. Ltd.
+ * Modified by: Tiwaloluwa Ojo
+ * Description: Derived from scout_robot_demo.cpp made by Weston Robot Pte. Ltd.
+ * Date: May 29, 2023
  */
 
 #include <unistd.h>
@@ -72,7 +74,7 @@ int main(int argc, char **argv)
               << state.motion_state.angular_velocity << std::endl;
     std::cout << "core state age (ms): "
               << std::chrono::duration_cast<std::chrono::milliseconds>(
-                     AgxMsgRefClock::now() - state.time_stamp)
+                     SdkClock::now() - state.time_stamp)
                      .count()
               << std::endl;
 
@@ -90,7 +92,7 @@ int main(int argc, char **argv)
       }
       std::cout << "actuator state age (ms): "
                 << std::chrono::duration_cast<std::chrono::milliseconds>(
-                       AgxMsgRefClock::now() - actuator.time_stamp)
+                       SdkClock::now() - actuator.time_stamp)
                        .count()
                 << std::endl;
     }
@@ -107,7 +109,7 @@ int main(int argc, char **argv)
       }
       std::cout << "actuator state age (ms): "
                 << std::chrono::duration_cast<std::chrono::milliseconds>(
-                       AgxMsgRefClock::now() - actuator.time_stamp)
+                       SdkClock::now() - actuator.time_stamp)
                        .count()
                 << std::endl;
     }

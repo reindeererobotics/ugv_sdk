@@ -31,11 +31,6 @@ class DasherBase : public westonrobot::ScoutBase<westonrobot::ProtocolV2Parser> 
                                  std::placeholders::_1));
   }
 
-  void Connect(std::string uart_name, uint32_t baudrate) override {
-    // TODO
-  }
-
-
  // robot control
 
   void SetMotionCommand(double linear_vel, double angular_vel) override{
@@ -50,7 +45,9 @@ class DasherBase : public westonrobot::ScoutBase<westonrobot::ProtocolV2Parser> 
         f_mode, f_value, r_mode, r_value);
   }
 
-
+  void DisableLightControl() override {
+    AgilexBase<westonrobot::ProtocolV2Parser>::DisableLightControl();
+  }
 
   westonrobot::ScoutCoreState GetRobotState() override {
     return ScoutBase::GetRobotState();
@@ -60,11 +57,11 @@ class DasherBase : public westonrobot::ScoutBase<westonrobot::ProtocolV2Parser> 
     return ScoutBase::GetActuatorState();
   }
 
-  private:
-  /*DO NOT USE*/
-  westonrobot::ScoutCommonSensorState GetCommonSensorState() override {
-    return ScoutBase::GetCommonSensorState();
-  }
+  // private:
+  // /*DO NOT USE*/
+  // westonrobot::ScoutCommonSensorState GetCommonSensorState() override {
+  //   return ScoutBase::GetCommonSensorState();
+  // }
 
   public:
 
@@ -123,32 +120,32 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
     switch (status_msg.type) {
       case AgxMsgSystemState: {
         //   std::cout << "system status feedback received" << std::endl;
-        core_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
+        core_state_msgs_.time_stamp = westonrobot::SdkClock::now();
         core_state_msgs_.system_state = status_msg.body.system_state_msg;
         break;
       }
       case AgxMsgMotionState: {
         // std::cout << "motion control feedback received" << std::endl;
-        core_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
+        core_state_msgs_.time_stamp = westonrobot::SdkClock::now();
         core_state_msgs_.motion_state = status_msg.body.motion_state_msg;
         break;
       }
       case AgxMsgLightState: {
         // std::cout << "light control feedback received" << std::endl;
-        core_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
+        core_state_msgs_.time_stamp = westonrobot::SdkClock::now();
         core_state_msgs_.light_state = status_msg.body.light_state_msg;
         break;
       }
       case AgxMsgMotionModeState: {
         // std::cout << "motion mode feedback received" << std::endl;
-        core_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
+        core_state_msgs_.time_stamp = westonrobot::SdkClock::now();
         core_state_msgs_.motion_mode_state =
             status_msg.body.motion_mode_state_msg;
         break;
       }
       case AgxMsgRcState: {
         // std::cout << "rc feedback received" << std::endl;
-        core_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
+        core_state_msgs_.time_stamp = westonrobot::SdkClock::now();
         core_state_msgs_.rc_state = status_msg.body.rc_state_msg;
         break;
       }
@@ -160,7 +157,7 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
 
  void UpdateActuatorState(const ReindeereMessage &status_msg) {
     std::lock_guard<std::mutex> guard(actuator_state_mtx_);
-   actuator_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
+   actuator_state_msgs_.time_stamp = westonrobot::SdkClock::now();
     switch (status_msg.type) {
       case AgxMsgMotorAngle: {
         actuator_state_msgs_.motor_angles.angle_5 =
@@ -186,7 +183,7 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
       }
       case AgxMsgActuatorHSState: {
         // std::cout << "actuator hs feedback received" << std::endl;
-        actuator_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
+        actuator_state_msgs_.time_stamp = westonrobot::SdkClock::now();
         actuator_state_msgs_
             .actuator_hs_state[status_msg.body.actuator_hs_state_msg.motor_id] =
             status_msg.body.actuator_hs_state_msg;
@@ -194,7 +191,7 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
       }
       case AgxMsgActuatorLSState: {
         // std::cout << "actuator ls feedback received" << std::endl;
-        actuator_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
+        actuator_state_msgs_.time_stamp = westonrobot::SdkClock::now();
         actuator_state_msgs_
             .actuator_ls_state[status_msg.body.actuator_ls_state_msg.motor_id] =
             status_msg.body.actuator_ls_state_msg;
@@ -202,7 +199,7 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
       }
       case AgxMsgActuatorStateV1: {
         // std::cout << "actuator v1 feedback received" << std::endl;
-        actuator_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
+        actuator_state_msgs_.time_stamp = westonrobot::SdkClock::now();
         actuator_state_msgs_
             .actuator_state[status_msg.body.v1_actuator_state_msg.motor_id] =
             status_msg.body.v1_actuator_state_msg;
@@ -221,13 +218,13 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
     switch (status_msg.type) {
       case AgxMsgBmsBasic: {
         //      std::cout << "system status feedback received" << std::endl;
-        common_sensor_state_msgs_.time_stamp = westonrobot::AgxMsgRefClock::now();
+        common_sensor_state_msgs_.time_stamp = westonrobot::SdkClock::now();
         common_sensor_state_msgs_.bms_basic_state =
             status_msg.body.bms_basic_msg;
         break;
       }
       case DasherMsgUltrasonic: {
-        common_sensor_state_msgs_.time_stamp =westonrobot::AgxMsgRefClock::now();
+        common_sensor_state_msgs_.time_stamp =westonrobot::SdkClock::now();
         common_sensor_state_msgs_.us_state = status_msg.body.ultrasonic_msg;
         break;
       }

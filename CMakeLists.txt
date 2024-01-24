@@ -88,7 +88,7 @@ set(FETCHCONTENT_UPDATES_DISCONNECTED_ROBOTDATAPARSER ON)
 FetchContent_Declare(
     robotDataParser
     GIT_REPOSITORY https://github.com/reindeererobotics/robotDataParser.git
-    GIT_TAG dev
+    GIT_TAG chore/merge-ugv_sdk
     GIT_SHALLOW TRUE  # only fetches a subset of the repository's history, starting from the specified commit or branch
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/libs/robotdataparser
     )
@@ -112,7 +112,6 @@ add_library(${PROJECT_NAME}
     src/mobile_robot/scout_robot.cpp
     src/mobile_robot/hunter_robot.cpp
     src/mobile_robot/bunker_robot.cpp
-
     src/mobile_robot/ranger_robot.cpp
     src/mobile_robot/dasher_robot.cpp
     include/ugv_sdk/details/robot_base/dasher_base.hpp

@@ -21,6 +21,9 @@
 #include "ugv_sdk/details/async_port/async_can.hpp"
 #include "ugv_sdk/details/interface/robot_common_interface.hpp"
 #include "ugv_sdk/details/parser_base.hpp"
+#include "reindeere/interface/reindeere_message.h"
+#include "agilex/interface/agilex_message.h"
+
 
 namespace westonrobot {
 struct CoreStateMsgGroup {
@@ -31,8 +34,6 @@ struct CoreStateMsgGroup {
   LightStateMessage light_state;
   MotionModeStateMessage motion_mode_state;
   RcStateMessage rc_state;
-
-  BmsBasicMessage bms_basic_state;
 };
 
 struct ActuatorStateMsgGroup {
@@ -45,9 +46,18 @@ struct ActuatorStateMsgGroup {
   MotorAngleMessage motor_angles;  // ranger only
   MotorSpeedMessage motor_speeds;  // ranger only
 };
-
-struct SensorStateMsgGroup {
+  struct CommonSensorStateMsgGroup {
   SdkTimePoint time_stamp;
+  BmsBasicMessage bms_basic_state;
+  BmsExtendedMessage bms_extend_state;
+  UltrasonicMessage us_state;
+
+  ImuAccelMessage imu_accel_state;
+  ImuGravMessage imu_grav_state;
+  ImuMagMessage imu_mag_state;
+  ImuGyroMessage imu_gyro_state;
+  ImuQuatMessage imu_quat_state;
+  ImuEulerMessage imu_euler_state;
 };
 
 template <typename ParserType>
@@ -183,7 +193,7 @@ class AgilexBase : public RobotCommonInterface {
     return actuator_state_msgs_;
   }
 
-  SensorStateMsgGroup GetSensorStateMsgGroup() {
+  CommonSensorStateMsgGroup GetCommonSensorStateMsgGroup() {
     std::lock_guard<std::mutex> guard(common_sensor_state_mtx_);
     return common_sensor_state_msgs_;
   }
@@ -205,7 +215,7 @@ class AgilexBase : public RobotCommonInterface {
 
   /* feedback group 3: common sensor */
   std::mutex common_sensor_state_mtx_;
-  SensorStateMsgGroup common_sensor_state_msgs_;
+  CommonSensorStateMsgGroup common_sensor_state_msgs_;
 
   std::mutex version_str_buf_mtx_;
   std::string version_string_buffer_;
@@ -276,11 +286,10 @@ class AgilexBase : public RobotCommonInterface {
   void ParseCANFrame(can_frame *rx_frame) {
     AgxMessage status_msg;
 
-
     if (parser_.DecodeMessage(rx_frame, &status_msg)) {
       UpdateRobotCoreState(status_msg);
       UpdateActuatorState(status_msg);
-      UpdateSensorState(status_msg);
+      UpdateCommonSensorState(status_msg);
       UpdateResponseVersion(status_msg);
     }
   }
@@ -317,12 +326,6 @@ class AgilexBase : public RobotCommonInterface {
         // std::cout << "rc feedback received" << std::endl;
         core_state_msgs_.time_stamp = SdkClock::now();
         core_state_msgs_.rc_state = status_msg.body.rc_state_msg;
-        break;
-      }
-      case AgxMsgBmsBasic: {
-        //      std::cout << "system status feedback received" << std::endl;
-        core_state_msgs_.time_stamp = SdkClock::now();
-        core_state_msgs_.bms_basic_state = status_msg.body.bms_basic_msg;
         break;
       }
       default:
@@ -382,11 +385,22 @@ class AgilexBase : public RobotCommonInterface {
     }
   }
 
-  void UpdateSensorState(const AgxMessage &status_msg) {
+  void UpdateCommonSensorState(const AgxMessage &status_msg) {
     std::lock_guard<std::mutex> guard(common_sensor_state_mtx_);
     //    std::cout << common_sensor_state_msgs_.bms_basic_state.battery_soc<<
     //    std::endl;
     switch (status_msg.type) {
+      case AgxMsgBmsBasic: {
+        //      std::cout << "system status feedback received" << std::endl;
+        common_sensor_state_msgs_.time_stamp = SdkClock::now();
+        common_sensor_state_msgs_.bms_basic_state =
+            status_msg.body.bms_basic_msg;
+        break;
+      }
+      case AgxMsgBmsExtended: {
+        common_sensor_state_msgs_.bms_extend_state = 
+          status_msg.body.bms_extended_msg;
+      }
       default:
         break;
     }
