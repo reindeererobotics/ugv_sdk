@@ -21,7 +21,6 @@ class DasherRobot : public westonrobot::ScoutRobot::ScoutRobot{
   ~DasherRobot();
 
   bool Connect(std::string can_name) override;
-  void Connect(std::string uart_name, uint32_t baudrate) override;
 
   void EnableCommandedMode() override;
 

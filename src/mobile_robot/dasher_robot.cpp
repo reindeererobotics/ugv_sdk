@@ -29,10 +29,6 @@ bool DasherRobot::Connect(std::string can_name) {
   return robot_->Connect(can_name);
 }
 
-void DasherRobot::Connect(std::string uart_name, uint32_t baudrate) {
-  //   robot_->Connect(uart_name, baudrate);
-}
-
 void DasherRobot::ResetRobotState() { robot_->ResetRobotState(); }
 
 ProtocolVersion DasherRobot::GetParserProtocolVersion() {
@@ -44,7 +40,10 @@ void DasherRobot::SetMotionCommand(double linear_vel, double angular_vel) {
   dasher->SetMotionCommand(linear_vel, angular_vel);
 }
 
-void DasherRobot::DisableLightControl() { robot_->DisableLightControl(); }
+void DasherRobot::DisableLightControl() { 
+  auto scout = dynamic_cast<DasherInterface*>(robot_);
+  scout->DisableLightControl();
+}
 
 void DasherRobot::SetLightCommand(AgxLightMode f_mode, uint8_t f_value,
                                  AgxLightMode r_mode, uint8_t r_value) {

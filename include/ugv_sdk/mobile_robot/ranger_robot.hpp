@@ -45,7 +45,6 @@ class RangerRobot : public RobotCommonInterface, public RangerInterface {
   RangerCoreState GetRobotState() override;
   RangerActuatorState GetActuatorState() override;
   RangerCommonSensorState GetCommonSensorState() override;
-
  private:
   RobotCommonInterface* robot_;
 };
