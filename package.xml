@@ -15,5 +15,6 @@
 
   <buildtool_depend>catkin</buildtool_depend> 
   <build_depend>asio</build_depend>
+  <depend>libasio-dev</depend>
   <export></export>
 </package>
