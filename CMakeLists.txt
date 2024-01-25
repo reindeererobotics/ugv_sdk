@@ -87,7 +87,7 @@ message(CHECK_START "Finding robotdataparser")
 list(APPEND CMAKE_MESSAGE_INDENT "  ")
 
 if(EXISTS ${CMAKE_SOURCE_DIR}/libs/robotdataparser)
-    add_subdirectory(${CMAKE_SOURCE_DIR}/libs/robotdataparser EXCLUDE_FROM_ALL)
+    add_subdirectory(${CMAKE_SOURCE_DIR}/libs/robotdataparser)
     message(CHECK_PASS "found")
 else()
     message(CHECK_FAIL "not found")
