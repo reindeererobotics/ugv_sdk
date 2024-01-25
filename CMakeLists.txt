@@ -82,18 +82,30 @@ if(BUILD_WITHOUT_ROS)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 endif()
 
-# Fetching robotdataparser
-include(FetchContent)
-set(FETCHCONTENT_UPDATES_DISCONNECTED_ROBOTDATAPARSER ON)
-FetchContent_Declare(
-    robotDataParser
-    GIT_REPOSITORY https://github.com/reindeererobotics/robotDataParser.git
-    GIT_TAG chore/merge-ugv_sdk
-    GIT_SHALLOW TRUE  # only fetches a subset of the repository's history, starting from the specified commit or branch
-    SOURCE_DIR ${CMAKE_SOURCE_DIR}/libs/robotdataparser
-    )
+## Find dependencies
+message(CHECK_START "Finding robotdataparser")
+list(APPEND CMAKE_MESSAGE_INDENT "  ")
 
-FetchContent_MakeAvailable(robotDataParser)
+if(EXISTS ${CMAKE_SOURCE_DIR}/libs/robotdataparser)
+    add_subdirectory(${CMAKE_SOURCE_DIR}/libs/robotdataparser EXCLUDE_FROM_ALL)
+    message(CHECK_PASS "found")
+else()
+    message(CHECK_FAIL "not found")
+    message(STATUS "fetching robotdataparser from remote")
+    
+    # Fetching robotdataparser
+    include(FetchContent)
+    FetchContent_Declare(
+        robotDataParser
+        GIT_REPOSITORY https://github.com/reindeererobotics/robotDataParser.git
+        GIT_TAG dev
+        GIT_SHALLOW TRUE  # only fetches a subset of the repository's history, starting from the specified commit or branch
+        SOURCE_DIR ${CMAKE_SOURCE_DIR}/libs/robotdataparser
+        )
+    
+    FetchContent_MakeAvailable(robotDataParser)
+endif()
+list(POP_BACK CMAKE_MESSAGE_INDENT)
 
 ## Build libraries
 find_package(Threads REQUIRED)
