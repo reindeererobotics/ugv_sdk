@@ -51,7 +51,8 @@ It should also work in other similar Linux environments but only the above liste
 
 ```
 $ sudo apt-get update
-$ sudo apt-get install build-essential git cmake libasio-dev
+$ sudo apt-get install build-essential git cmake libasio-dev python3-vcstool
+$ vcs import ../ < deps.repos
 ```
 
 ### Build the package in a catkin workspace

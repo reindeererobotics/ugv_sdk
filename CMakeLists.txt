@@ -91,19 +91,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/libs/robotdataparser)
     message(CHECK_PASS "found")
 else()
     message(CHECK_FAIL "not found")
-    message(STATUS "fetching robotdataparser from remote")
-    
-    # Fetching robotdataparser
-    include(FetchContent)
-    FetchContent_Declare(
-        robotdataparser
-        GIT_REPOSITORY https://github.com/reindeererobotics/robotdataparser.git
-        GIT_TAG dev
-        GIT_SHALLOW TRUE  # only fetches a subset of the repository's history, starting from the specified commit or branch
-        SOURCE_DIR ${CMAKE_SOURCE_DIR}/libs/robotdataparser
-        )
-    
-    FetchContent_MakeAvailable(robotdataparser)
+    message(STATUS "Run `vcs import ../ < deps.repos` to fetch robotdataparser")
 endif()
 list(POP_BACK CMAKE_MESSAGE_INDENT)
 
