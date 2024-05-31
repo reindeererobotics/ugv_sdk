@@ -2,4 +2,4 @@ repositories:
   ugv_sdk/libs/robotdataparser:
     type: git
     url: https://github.com/reindeererobotics/robotdataparser.git
-    version: dev
+    version: patch/invalid-states

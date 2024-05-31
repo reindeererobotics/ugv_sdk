@@ -17,7 +17,6 @@
 #include "ugv_sdk/mobile_robot/dasher_robot.hpp"
 #include "ugv_sdk/utilities/protocol_detector.hpp"
 
-using namespace westonrobot;
 using namespace dasher;
 
 int main(int argc, char **argv)
@@ -74,7 +73,7 @@ int main(int argc, char **argv)
               << state.motion_state.angular_velocity << std::endl;
     std::cout << "core state age (ms): "
               << std::chrono::duration_cast<std::chrono::milliseconds>(
-                     SdkClock::now() - state.time_stamp)
+                     westonrobot::SdkClock::now() - state.time_stamp)
                      .count()
               << std::endl;
 
@@ -92,7 +91,7 @@ int main(int argc, char **argv)
       }
       std::cout << "actuator state age (ms): "
                 << std::chrono::duration_cast<std::chrono::milliseconds>(
-                       SdkClock::now() - actuator.time_stamp)
+                       westonrobot::SdkClock::now() - actuator.time_stamp)
                        .count()
                 << std::endl;
     }
@@ -100,16 +99,17 @@ int main(int argc, char **argv)
     {
       for (int i = 0; i < 4; ++i)
       {
-        printf("motor %d: current %f, rpm %d, driver temp %f, motor temp %f\n",
+        printf("motor %d: current %f, rpm %d, pulse_count %d, driver temp %f, motor temp %f\n",
                actuator.actuator_hs_state[i].motor_id,
                actuator.actuator_hs_state[i].current,
                actuator.actuator_hs_state[i].rpm,
+               actuator.actuator_hs_state[i].pulse_count,
                actuator.actuator_ls_state[i].driver_temp,
                actuator.actuator_ls_state[i].motor_temp);
       }
       std::cout << "actuator state age (ms): "
                 << std::chrono::duration_cast<std::chrono::milliseconds>(
-                       SdkClock::now() - actuator.time_stamp)
+                       westonrobot::SdkClock::now() - actuator.time_stamp)
                        .count()
                 << std::endl;
     }
@@ -126,24 +126,24 @@ int main(int argc, char **argv)
            sensor_state.us_state.distance[0],
            sensor_state.us_state.sensor_id);
 
-    printf("imu_accel_state{x,y,z}: %f,%f,%f",
+    printf("imu_accel_state{x,y,z}: %f,%f,%f\n",
                                               sensor_state.imu_accel_state.accel_x,
                                               sensor_state.imu_accel_state.accel_y,
                                               sensor_state.imu_accel_state.accel_z);
     
-    printf("imu_gyro_state{x,y,z}: %f,%f,%f",
+    printf("imu_gyro_state{x,y,z}: %f,%f,%f\n",
                                               sensor_state.imu_gyro_state.gyro_x,
                                               sensor_state.imu_gyro_state.gyro_y,
                                               sensor_state.imu_gyro_state.gyro_z);
-    printf("imu_mag_state{x,y,z}: %f,%f,%f",
+    printf("imu_mag_state{x,y,z}: %f,%f,%f\n",
                                               sensor_state.imu_mag_state.mag_x,
                                               sensor_state.imu_mag_state.mag_y,
                                               sensor_state.imu_mag_state.mag_z);
-    printf("imu_grav_state{x,y,z}: %f,%f,%f",
+    printf("imu_grav_state{x,y,z}: %f,%f,%f\n",
                                               sensor_state.imu_grav_state.grav_x,
                                               sensor_state.imu_grav_state.grav_y,
                                               sensor_state.imu_grav_state.grav_z);
-    printf("imu_quat_state{w,x,y,z}: %f,%f,%f,%f",
+    printf("imu_quat_state{w,x,y,z}: %f,%f,%f,%f\n",
                                               sensor_state.imu_quat_state.quat_x,
                                               sensor_state.imu_quat_state.quat_x,
                                               sensor_state.imu_quat_state.quat_y,
