@@ -159,8 +159,6 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
  void UpdateActuatorState(const ReindeereMessage &status_msg) {
     std::lock_guard<std::mutex> guard(actuator_state_mtx_);
    actuator_state_msgs_.time_stamp = westonrobot::SdkClock::now();
-  //  printf("Inside dasher_base: Type = %d, Val = %f\n", status_msg.agx.type,
-  //            status_msg.agx.body.actuator_hs_state_msg.current);
     switch (status_msg.agx.type) {
       case AgxMsgMotorAngle: {
         actuator_state_msgs_.motor_angles.angle_5 =
@@ -190,8 +188,6 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
         actuator_state_msgs_
             .actuator_hs_state[status_msg.agx.body.actuator_hs_state_msg.motor_id] =
             status_msg.agx.body.actuator_hs_state_msg;
-        printf("Inside dasher_base/updateAct: Type = %d, Val = %f\n", status_msg.agx.type,
-             actuator_state_msgs_.actuator_hs_state[status_msg.agx.body.actuator_hs_state_msg.motor_id].current);
         break;
       }
       case AgxMsgActuatorLSState: {
