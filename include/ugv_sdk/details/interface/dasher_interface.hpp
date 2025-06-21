@@ -29,6 +29,9 @@ struct DasherCommonSensorState : westonrobot::ScoutCommonSensorState {
     ImuGyroMessage imu_gyro_state;
     ImuQuatMessage imu_quat_state;
     ImuEulerMessage imu_euler_state;
+    GPSDataMessage gps_data_state;
+    GPSMetaDMessage gps_metad_state;
+    AndroidMessage android_data_state;
 };
 
 class DasherInterface : public westonrobot::ScoutInterface {

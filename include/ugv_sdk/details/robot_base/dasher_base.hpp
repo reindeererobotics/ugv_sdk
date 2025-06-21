@@ -80,6 +80,10 @@ class DasherBase : public westonrobot::ScoutBase<westonrobot::ProtocolV2Parser> 
     dasher_common_sensor.imu_mag_state = common_sensor.imu_mag_state;
     dasher_common_sensor.imu_quat_state = common_sensor.imu_quat_state;
     dasher_common_sensor.imu_euler_state = common_sensor.imu_euler_state;
+    
+    dasher_common_sensor.gps_data_state = common_sensor.gps_data_state;
+    dasher_common_sensor.gps_metad_state = common_sensor.gps_metad_state;
+    dasher_common_sensor.android_data_state = common_sensor.android_data_state;
 
 //    std::cout << static_cast<unsigned int>(scout_common_sensor.bms_basic_state.battery_soc) << std::endl;
 
@@ -242,6 +246,9 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
       case DasherMsgImuGrav: {
         common_sensor_state_msgs_.imu_grav_state =
             status_msg.body.imu_grav_msg;
+        // printf("Grav.x = %f\n", status_msg.body.imu_grav_msg.grav_x);
+        // printf("Grav.y = %f\n", status_msg.body.imu_grav_msg.grav_y);
+        // printf("Grav.z = %f\n", status_msg.body.imu_grav_msg.grav_z);
         break;
       }
       case DasherMsgImuGyro: {
@@ -257,6 +264,21 @@ void UpdateRobotCoreState(const ReindeereMessage &status_msg) {
       case DasherMsgImuQuat: {
         common_sensor_state_msgs_.imu_quat_state=
             status_msg.body.imu_quat_msg;
+        break;
+      }
+      case DasherMsgGpsData: {
+        common_sensor_state_msgs_.gps_data_state=
+            status_msg.body.gps_data_msg;
+        break;
+      }
+      case DasherMsgGpsMetaD: {
+        common_sensor_state_msgs_.gps_metad_state=
+            status_msg.body.gps_metad_msg;
+        break;
+      }
+      case DasherMsgAndroidData: {
+        common_sensor_state_msgs_.android_data_state=
+            status_msg.body.android_data_msg;
         break;
       }
       default:
